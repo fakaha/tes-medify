@@ -24,16 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($kategori as $k)
-                    <tr>
-                        <td>{{ $k->kode }}</td>
-                        <td>
-                            <a href="{{ route('kategori.show', $k->id) }}">
-                                {{ $k->nama }}
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
+                    
                 </tbody>
             </table>
 
@@ -42,50 +33,54 @@
 </div>
 @endsection
 
-@section('scripts')
+@section('js')
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
 <script>
-$(document).ready(function() {
-    // Buat table global supaya bisa diakses di getData()
-    var table = $('#table').DataTable({
-        searching: false,
-        ordering: true,
-        paging: true
+    let table;
+
+    $(document).ready(function() {
+        table = $('#table').DataTable({
+            searching: false,
+            order: [[0, 'desc']],
+        });
+        getData();
     });
 
-    // Event tombol filter
     $('.btn-get-data').click(function() {
         getData();
     });
 
-    function getData(){
-        var filter_nama = $('#filter-nama').val();
-        var filter_kode = $('#filter-kode').val();
+    function getData() {
+    let filter_kode = $('#filter-kode').val();
+    let filter_nama = $('#filter-nama').val();
 
-        table.clear().draw(); // clear table sebelum diisi
+    table.clear();
 
-        $.ajax({
-            url: '{{ url("kategori-items/search") }}',
-            data: { nama: filter_nama, kode: filter_kode },
-            dataType: 'json',
-            success: function(res){
-                $.each(res.data, function(i, k){
-                    table.row.add([
-                        k.kode,
-                        k.nama,
-                        `<a href="{{ url('kategori-items') }}/${k.id}" class="btn btn-primary">View</a>`
-                    ]).draw(false);
-                });
-                $('#loading-filter').hide();
-            },
-            error: function(){
-                alert('Gagal mengambil data.');
-                $('#loading-filter').hide();
-            }
-        });
-    }
-});
+    $.ajax({
+        url: '{{ url("kategori-items/search") }}',
+        dataType: 'json',
+        data: {
+            kode: filter_kode,
+            nama: filter_nama
+        },
+        success: function(results) {
+            let data = results.data;
+
+            $.each(data, function(index, item) {
+                table.row.add([
+                    item.kode,
+                    `<a href="/kategori-items/${item.id}">${item.nama}</a>`
+                ]);
+            });
+
+            table.draw();
+        },
+        error: function() {
+            alert('Terjadi kesalahan server, tidak dapat mengambil data');
+        }
+    });
+}
 </script>
 @endsection

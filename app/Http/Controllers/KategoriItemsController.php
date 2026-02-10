@@ -46,13 +46,20 @@ class KategoriItemsController extends Controller
 
     public function search(Request $request)
     {
-        $query = KategoriItem::query();
-        if ($request->nama) $query->where('nama','LIKE','%'.$request->nama.'%');
-        if ($request->kode) $query->where('kode','LIKE','%'.$request->kode.'%');
+        $nama = $request->nama;
+        $kode = $request->kode;
 
-        $data = $query->get();
+        $data_search = KategoriItem::query();
 
-        return response()->json(['data' => $data]);
+        if (!empty($kode)) $data_search = $data_search->where('kode', 'LIKE', '%' . $kode . '%');
+        if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
+
+        $data_search = $data_search->select('id', 'kode', 'nama')->get();
+
+        return json_encode([
+            'status' => 200,
+            'data' => $data_search
+        ]);
     }
 
     public function cetak_pdf($id)
