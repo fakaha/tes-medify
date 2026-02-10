@@ -6,6 +6,7 @@ use App\Models\KategoriItem;
 use App\Models\MasterItem;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class KategoriItemsController extends Controller
@@ -64,9 +65,10 @@ class KategoriItemsController extends Controller
 
     public function cetak_pdf($id)
     {
-        $kategori = KategoriItem::with('masterItems')->findOrFail($id);
+        $data['kategori'] = KategoriItem::with('masterItems')->findOrFail($id);
+        $data['now'] = Carbon::now();
 
-        $pdf = Pdf::loadView('kategori_items.kategori_pdf', ['kategori' => $kategori]);
+        $pdf = Pdf::loadView('kategori_items.kategori_pdf', $data);
         return $pdf->download();
     }
 }

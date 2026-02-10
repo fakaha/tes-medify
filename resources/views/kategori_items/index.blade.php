@@ -13,7 +13,6 @@
                 <input type="text" id="filter-nama" placeholder="Nama kategori" class="form-control mb-1">
                 <input type="text" id="filter-kode" placeholder="Kode kategori" class="form-control mb-1">
                 <button class="btn btn-primary mt-1 btn-get-data" id="btn-get-data">Filter</button>
-                <button type="button" class="btn btn-secondary btn-reset-data">Reset</button>
             </div>
 
             <table id="table" class="table table-bordered table-striped">

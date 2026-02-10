@@ -27,5 +27,8 @@
 				@endforeach
 			</tbody>
 		</table>
+        <footer class="position-fixed bottom-0 start-50 translate-middle">
+            {{$now}}
+        </footer>
  
 	</div>
