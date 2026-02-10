@@ -4,20 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MasterItem extends Model
+class KategoriItem extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
-    public function kategoriItems()
+    protected $fillable = ['nama', 'kode'];
+
+    public function masterItems()
     {
         return $this->belongsToMany(
-            KategoriItem::class,
+            MasterItem::class,
             'kategori_item_master_item',
-            'master_item_id',
-            'kategori_item_id'
+            'kategori_item_id',
+            'master_item_id'
         );
     }
 }

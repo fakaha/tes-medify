@@ -1,4 +1,4 @@
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     @csrf
     @if($method == 'edit')
     <div class="form-group">
@@ -46,6 +46,24 @@
             <optio @if($selected == 'Umum') selected @endif>Umum</option>
             <optio @if($selected == 'ATK') selected @endif>ATK</option>
         </select>
+    </div>
+
+    <div class="form-group">
+        <label>Foto</label>
+        <input type="file" name="foto" required>
+    </div>
+
+    <div class="form-group">
+    <label>Kategori</label>
+    @foreach($kategori as $k)
+        <div>
+            <input type="checkbox" 
+                   name="kategori_ids[]" 
+                   value="{{ $k->id }}"
+                   {{ isset($item) && $item->kategoriItems && $item->kategoriItems->contains($k->id) ? 'checked' : '' }}>
+            {{ $k->nama }}
+        </div>
+    @endforeach
     </div>
 
     <button class="btn btn-primary mt-3">Submit</button>

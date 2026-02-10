@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KategoriItem;
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,12 @@ class MasterItemsController extends Controller
 
         if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
         if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
-        if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
+        if(!empty($hargamin)){
+            $data_search->where('harga_beli', '>=', $hargamin);
+        }
+        if(!empty($hargamax)){
+            $data_search->where('harga_beli', '<=', $hargamax);
+        }
 
         $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
 
@@ -37,12 +43,14 @@ class MasterItemsController extends Controller
     public function formView($method, $id = 0)
     {
         if ($method == 'new') {
-            $item = [];
+            $item = null;
         } else {
             $item = MasterItem::find($id);
         }
         $data['item'] = $item;
         $data['method'] = $method;
+        $data['kategori'] = KategoriItem::orderBy('nama')->get();
+
         return view('master_items.form.index', $data);
     }
 
@@ -71,7 +79,16 @@ class MasterItemsController extends Controller
         $data_item->kode = $kode;
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
+
+        if ($request->hasFile('foto')) {
+        $path = $request->file('foto')
+            ->store('master-items', 'public');
+
+        $data_item->foto = $path;
+        }
         $data_item->save();
+
+        $data_item->kategoriItems()->sync($request->kategori_ids ?? []);
 
         return redirect('master-items');
     }
