@@ -37,3 +37,4 @@ Route::get('/kategori-items/create', [App\Http\Controllers\KategoriItemsControll
 Route::post('/kategori-items/store', [App\Http\Controllers\KategoriItemsController::class, 'store']);
 Route::get('kategori-items/search', [App\Http\Controllers\KategoriItemsController::class, 'search']);
 Route::get('/kategori-items/{id}', [App\Http\Controllers\KategoriItemsController::class, 'show'])->name('kategori.show');
+Route::get('kategori-items/{id}/cetak_pdf', [App\Http\Controllers\KategoriItemsController::class, 'cetak_pdf'])->name('kategori.cetak_pdf');
