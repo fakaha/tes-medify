@@ -1,25 +1,28 @@
+<link rel="stylesheet" href="{{ public_path('libs/bootstrap/css/bootstrap.min.css') }}">
+
 <div class="container">
 		<center>
 			<h4>Kategori</h4>
 		</center>
 		<br/>
-		<a href="/kategori-items/cetak_pdf" class="btn btn-primary" target="_blank">CETAK PDF</a>
+
+        <h4>Kategori : {{$kategori->nama}}</h4>
+        <h4>Kode : {{$kategori->kode}}</h4>
 		<table class='table table-bordered'>
 			<thead>
 				<tr>
 					<th>No</th>
 					<th>Nama</th>
 					<th>Kode</th>
-                    <th>Item</th>
 				</tr>
 			</thead>
 			<tbody>
 				@php $i=1 @endphp
-				@foreach($kategori as $p)
+				@foreach($kategori->masterItems as $item)
 				<tr>
 					<td>{{ $i++ }}</td>
-					<td>{{$p->nama}}</td>
-					<td>{{$p->kode}}</td>
+					<td>{{$item->nama}}</td>
+					<td>{{$item->kode}}</td>
 				</tr>
 				@endforeach
 			</tbody>

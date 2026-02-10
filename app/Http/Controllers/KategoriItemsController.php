@@ -55,11 +55,11 @@ class KategoriItemsController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function cetak_pdf()
+    public function cetak_pdf($id)
     {
-        $kategori = KategoriItem::all();
+        $kategori = KategoriItem::with('masterItems')->findOrFail($id);
 
         $pdf = Pdf::loadView('kategori_items.kategori_pdf', ['kategori' => $kategori]);
-        return $pdf->stream();
+        return $pdf->download();
     }
 }
